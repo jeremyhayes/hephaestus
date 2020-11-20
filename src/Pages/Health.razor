@@ -1,0 +1,29 @@
+@page "/health"
+@inject HttpClient Http
+
+<h1>Health</h1>
+
+@if (health == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <dl>
+        @foreach (var kvp in health)
+        {
+            <dt>@(kvp.Key)</dt>
+            <dd>@(kvp.Value)</dd>
+        }
+    </dl>
+}
+
+@code {
+    private Dictionary<string, object> health;
+
+    protected override async Task OnInitializedAsync()
+    {
+        health = await Http.GetFromJsonAsync<Dictionary<string, object>>(
+            "http://localhost:8080/api/actuator/health");
+    }
+}
