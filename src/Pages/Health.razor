@@ -1,5 +1,7 @@
 @page "/health"
+
 @inject HttpClient Http
+@inject IJSRuntime JS
 
 <h1>Health</h1>
 
@@ -23,7 +25,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        health = await Http.GetFromJsonAsync<Dictionary<string, object>>(
-            "http://localhost:8080/api/actuator/health");
+        var baseUrl = await JS.InvokeAsync<string>("localStorage.getItem", "baseUrl");
+        var endpointUrl = $"{baseUrl}/health";
+        health = await Http.GetFromJsonAsync<Dictionary<string, object>>(endpointUrl);
     }
 }
