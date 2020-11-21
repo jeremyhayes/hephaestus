@@ -9,18 +9,23 @@
 }
 else
 {
-    <ul>
+    <dl>
         @foreach(var logger in data.Loggers)
         {
-            <li>
-                @(logger.Key) :: @(logger.Value.EffectiveLevel)
-                @if (!string.IsNullOrWhiteSpace(logger.Value.ConfiguredLevel))
+            <dt>@(logger.Key)</dt>
+            <dd>
+                @foreach(var level in data.Levels)
                 {
-                    <em> (@(logger.Value.ConfiguredLevel))</em>
+                    <label>
+                        <input type="radio" name="@(logger.Key)" value="@level" 
+                            @onchange="async () => await SetLogLevel(logger.Key, level)"
+                            checked=@(logger.Value.EffectiveLevel == level) />
+                        @level
+                    </label>
                 }
-            </li>
+            </dd>
         }
-    </ul>
+    </dl>
 }
 
 @code {
@@ -29,5 +34,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         data = await Service.GetLoggers();
+    }
+
+    // TODO this should probably use model binding and a form ¯\_(ツ)_/¯
+    private async Task SetLogLevel(string logger, string level)
+    {
+        await Service.SetLoggerLevel(logger, level);
     }
 }

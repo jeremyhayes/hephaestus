@@ -27,6 +27,16 @@ namespace Hephaestus
         public async Task<LoggerResponse> GetLoggers()
             => await GetResult<LoggerResponse>("loggers");
 
+        public async Task SetLoggerLevel(string logger, string level)
+        {
+            var baseUrl = await _js.InvokeAsync<string>("localStorage.getItem", "baseUrl");
+            var endpointUrl = $"{baseUrl}/loggers/{logger}";
+
+            await _httpClient.PostAsJsonAsync(endpointUrl, new {
+                configuredLevel = level
+            });
+        }
+
         private async Task<T> GetResult<T>(string path)
         {
             var baseUrl = await _js.InvokeAsync<string>("localStorage.getItem", "baseUrl");
