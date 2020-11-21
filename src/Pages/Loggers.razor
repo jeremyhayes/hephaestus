@@ -1,0 +1,33 @@
+@page "/loggers"
+@inject ActuatorService Service
+
+<h1>Loggers</h1>
+
+@if (data == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ul>
+        @foreach(var logger in data.Loggers)
+        {
+            <li>
+                @(logger.Key) :: @(logger.Value.EffectiveLevel)
+                @if (!string.IsNullOrWhiteSpace(logger.Value.ConfiguredLevel))
+                {
+                    <em> (@(logger.Value.ConfiguredLevel))</em>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private LoggerResponse data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await Service.GetLoggers();
+    }
+}
