@@ -17,11 +17,17 @@ namespace Hephaestus
             _js = js;
         }
 
-        public async Task<IDictionary<string,object>> GetHealth()
-        {       
+        public async Task<IDictionary<string, object>> GetHealth()
+            => await GetResult<IDictionary<string, object>>("health");
+
+        public async Task<IDictionary<string, object>> GetInfo()
+            => await GetResult<IDictionary<string, object>>("info");
+
+        private async Task<T> GetResult<T>(string path)
+        {
             var baseUrl = await _js.InvokeAsync<string>("localStorage.getItem", "baseUrl");
-            var endpointUrl = $"{baseUrl}/health";
-            return await _httpClient.GetFromJsonAsync<IDictionary<string, object>>(endpointUrl);
+            var endpointUrl = $"{baseUrl}/{path}";
+            return await _httpClient.GetFromJsonAsync<T>(endpointUrl);
         }
     }
 }
