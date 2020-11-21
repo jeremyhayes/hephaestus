@@ -3,23 +3,10 @@
 
 <h1>Info</h1>
 
-@if (data == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <dl>
-        @foreach (var kvp in data)
-        {
-            <dt>@(kvp.Key)</dt>
-            <dd>@(kvp.Value)</dd>
-        }
-    </dl>
-}
+<JsonTree Element="@data" />
 
 @code {
-    private IDictionary<string, object> data;
+    private JsonElement data;
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
@@ -17,11 +17,11 @@ namespace Hephaestus
             _js = js;
         }
 
-        public async Task<IDictionary<string, object>> GetHealth()
-            => await GetResult<IDictionary<string, object>>("health");
+        public async Task<JsonElement> GetHealth()
+            => await GetResult<JsonElement>("health");
 
-        public async Task<IDictionary<string, object>> GetInfo()
-            => await GetResult<IDictionary<string, object>>("info");
+        public async Task<JsonElement> GetInfo()
+            => await GetResult<JsonElement>("info");
 
         private async Task<T> GetResult<T>(string path)
         {

@@ -1,0 +1,31 @@
+@switch (Element.ValueKind)
+{
+    case JsonValueKind.Array:
+        @foreach(var prop in Element.EnumerateArray())
+        {
+            <JsonTree Element="@prop" />
+        }
+        break;
+    
+    case JsonValueKind.Object:
+        <dl>
+            @foreach (var prop in Element.EnumerateObject())
+            {
+                <dt>@(prop.Name)</dt>
+                <dd>
+                    <JsonTree Element="@prop.Value" />
+                </dd>
+            }
+        </dl>
+
+        break;    
+    
+    default:
+        <p>@(Element.ToString())</p>
+        break;
+}
+
+@code {
+    [Parameter]
+    public JsonElement Element { get; set; }
+}
